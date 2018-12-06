@@ -1,0 +1,364 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="./easyUi/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="./easyUi/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="./easyUi/demo/demo.css">
+    <script type="text/javascript" src="./easyUi/jquery.min.js"></script>
+    <script type="text/javascript" src="./easyUi/jquery.easyui.min.js"></script>
+    <title>青岛海湾化学有限公司输入页面</title>
+    <!--[if IE]>
+    <script src="js/html5shiv.js"></script>
+    <![endif]-->
+    <style>
+
+        html, body, div, ul, li, h1, h2, h3, h4, h5, h6, p, dl, dt, dd, ol, form, input, textarea, th, td, select iframe {
+            margin: 0;
+            padding: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            min-height: 100%;
+            font-family: "Microsoft YaHei";
+            font-size: 1rem;
+            color: #333;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .header {
+            height: 40px;
+            background: url("img/header.png");
+            text-align: center;
+            line-height: 40px;
+            color: #ffffff;
+            font-size: 20px;
+            padding-left: 30px;
+        }
+
+        .header-img {
+            float: left;
+        }
+
+        .header-title {
+            float: left;
+            margin-left: 10px;
+        }
+
+        .main {
+            background-color: #ffffff;
+        }
+
+        .tableDiv {
+            width: 1500px;
+            height: 550px;
+            margin: 0 auto;
+            overflow-x: auto;
+        }
+
+        .timeDiv {
+            height: 80px;
+            margin-bottom: 20px;
+            position: relative;
+            border-bottom: 1px solid #808080;
+        }
+
+        .cwTop {
+            width: 400px;
+            height: 80px;
+            margin: auto;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+        }
+
+        .cwTopDiv {
+            float: left;
+            margin-left: 15px;
+            margin-top: 20px;
+        }
+
+        .footer {
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+            font-size: 12px;
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-img">
+            <img src="./img/logo.png" style="height: 40px" alt="">
+        </div>
+        <div class="header-title">
+            <span>输入页面</span>
+        </div>
+    </div>
+    <div class="main" id="main">
+        <div class="timeDiv">
+            <div class="cwTop">
+                <div class="cwTopDiv">
+                    <span>查询时间：</span>
+                    <input id="Time" class="easyui-datebox" />
+                </div>
+                <div class="cwTopDiv">
+                    <a href="#" class="easyui-linkbutton" iconcls="icon-search" plain="true" onclick="doRanking()">查询数据</a>
+                </div>
+            </div>
+        </div>
+        <div class="tableDiv">
+            <table class="easyui-datagrid" title="氯碱厂" url="/GetData.ashx" style="width:1500px;height:500px;" id="tt" toolbar="tb">
+                <thead>
+                    <tr>
+                        <th data-options="field:'id',width:50,align:'center',editor: {
+                        type: 'text',
+                        options: {options: { required: true }}
+                    }">
+                            ID
+                        </th>
+                        <th data-options="field:'gc',width:100,align:'center',editor: {
+                        type: 'text',
+                        options: {options: { required: true }}
+                    }">
+                            工厂
+                        </th>
+                        <th data-options="field:'wl',width:100,align:'center',editor: {
+                        type: 'text',
+                        options: {options: { required: true }}
+                    }">
+                            物料编辑
+                        </th>
+                        <th data-options="field:'rk',width:70,align:'center',editor: {
+                        type: 'text',
+                        options: {options: { required: true }}
+                    }">
+                            入库数量
+                        </th>
+                        <th data-options="field:'dw',width:100,align:'center',editor: {
+                        type: 'text',
+                        options: {options: { required: true }}
+                    }">
+                            单位
+                        </th>
+                        <th data-options="field:'address',width:100,align:'center',editor: {
+                        type: 'text',
+                        options: {options: { required: true }}
+                    }">
+                            入库地点
+                        </th>
+                        <th data-options="field:'bm',width:120,align:'center',editor: {
+                        type: 'text',
+                        options: {options: { required: true }}
+                    }">
+                            组件物料编码
+                        </th>
+                        <th data-options="field:'ms',width:120,align:'center',editor: {
+                        type: 'text',
+                        options: {options: { required: true }}
+                    }">
+                            组件物料描述
+                        </th>
+                        <th data-options="field:'sl',width:50,align:'center',editor: {
+                        type: 'text',
+                        options: {options: { required: true }}
+                    }">
+                            数量
+                        </th>
+                        <th data-options="field:'js',width:80,align:'center' ,editor: {
+                        type: 'text',
+                        options: {options: { required: true }}
+                    }">
+                            计数单位
+                        </th>
+                        <th data-options="field:'tl',width:100,align:'center',editor: {
+                        type: 'text',
+                        options: {options: { required: true }}
+                    }">
+                            投料地点
+                        </th>
+                        <th data-options="field:'yd',width:100,align:'center',editor: {
+                        type: 'text',
+                        options: {options: { required: true }}
+                    }">
+                            移动类型
+                        </th>
+                        <th data-options="field:'data',width:100,align:'center',editor: {
+                        type: 'text',
+                        options: {options: { required: true }}
+                    }">
+                            数据质量
+                        </th>
+                        <th data-options="field:'date',width:150,align:'center',editor: {
+                        type: 'text',
+                        options: {options: { required: true }}
+                    }">
+                            日期
+                        </th>
+                        <th data-options="field:'time',width:150,align:'center',editor: {
+                        type: 'text',
+                        options: {options: { required: true }}
+                    }">
+                            时间
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+            <div id="tb" style="padding: 5px; height: auto">
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p class="">Copyright © 2018 青岛海湾化学有限公司 版权所有,开发维护：山东英伟电子技术有限公司</p>
+    </div>
+    <script type="text/javascript">
+        //页面加载设置下载列表和页面高度
+        window.onload = function () {
+            setMainHeight(); //页面高度;
+
+        };
+        $.extend($.fn.datagrid.methods, {
+            onAfterEdit: function (rowIndex, rowData, changes) {
+                editRow = undefined;
+            },
+            onDblClickRow: function (rowIndex, rowData) {
+                if (editRow != undefined) {
+                    $("#tt").datagrid('endEdit', editRow);
+                }
+
+                if (editRow == undefined) {
+                    $("#tt").datagrid('beginEdit', rowIndex);
+                    editRow = rowIndex;
+                }
+            },
+            onClickRow: function (rowIndex, rowData) {
+                localStorage.setItem("index", rowIndex);
+                if (editRow != undefined) {
+                    $("#tt").datagrid('endEdit', editRow);
+                }
+
+            }
+        });
+        var toolbar = [
+            {
+            text: '添加', iconCls: 'icon-add', handler: function () {
+                if (editRow != undefined) {
+                    $("#tt").datagrid('endEdit', editRow);
+                }
+                if (editRow == undefined) {
+                    $("#tt").datagrid('insertRow', {
+                        index: 0,
+                        row: {}
+                    });
+                    $("#tt").datagrid('beginEdit', 0);
+                    editRow = 0;
+                }
+            }
+        }, '-',
+        {
+            text: '保存', iconCls: 'icon-save', handler: function () {
+                $("#tt").datagrid('endEdit', editRow);
+            }
+        }, '-',
+        {
+            text: '撤销', iconCls: 'icon-redo', handler: function () {
+                editRow = undefined;
+                $("#tt").datagrid('rejectChanges');
+                $("#tt").datagrid('unselectAll');
+            }
+        }, '-',
+        {
+            text: '删除', iconCls: 'icon-remove', handler: function () {
+                var row = $("#tt").datagrid('getSelections');
+                if (row.length > 0) {
+                    $.messager.confirm('Confirm', '是否确认删除?', function (r) {
+                        if (r) {
+                            index = localStorage.getItem("index");
+                            var i = parseInt(index);
+                            $("#tt").datagrid("deleteRow", i);
+                        }
+                    });
+
+                }
+                else {
+                    alert("没有选择需要删除的列")
+                }
+
+            }
+        }, '-',
+        {
+            text: '修改', iconCls: 'icon-edit', handler: function () {
+                var row = $("#tt").datagrid('getSelected');
+                if (row != null) {
+                    if (editRow != undefined) {
+                        $("#tt").datagrid('endEdit', editRow);
+                    }
+
+                    if (editRow == undefined) {
+                        var index = $("#tt").datagrid('getRowIndex', row);
+                        $("#tt").datagrid('beginEdit', index);
+                        editRow = index;
+                        $("#tt").datagrid('unselectAll');
+                    }
+                } else {
+
+                }
+            }
+        }, '-',
+        {
+            text: '发送', iconCls: 'icon-ok', handler: function () {
+                $.messager.confirm('Confirm', '是否确认发送到服务器?', function (r) {
+                    if (r) {
+                        var data = $("#tt").datagrid("getRows");
+                        var dataStr = JSON.stringify(data);
+                        console.log(dataStr);
+                        $.post('/setData', dataStr, function (data) {
+                            if (data === "1") {
+                                alert("发送成功")
+                            }
+                        });
+                    }
+                });
+            }
+        }];
+        //页面高度
+        function setMainHeight() {
+            var w = document.body.scrollHeight;
+            var main = document.getElementById("main");
+            main.style.height = (w - 60) + "px";
+
+        }
+
+        function doRanking() {
+            var time = $("#Time").val();
+            if (time.length > 0) {
+                $('#tt').datagrid('load', {
+                    Time: time
+                });
+            }
+            else {
+                alert("查询时间不能为空");
+            }
+        }
+
+    </script>
+</body>
+</html>
