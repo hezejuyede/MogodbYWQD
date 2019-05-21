@@ -102,7 +102,7 @@
     </div>
 </div>
 <div class="footer">
-    <p class="">Copyright © 2018 青岛海湾化学有限公司 版权所有,网站开发维护：山东英伟电子技术有限公司</p>
+    <p class="">Copyright © 2018 青岛海湾化学有限公司 版权所有</p>
 </div>
 <script src="js/jquery-1.4.4.min.js"></script>
 <script src="js/jquery.ztree.all.min.js"></script>
@@ -155,11 +155,16 @@
                         }
                         var name = getFilePath(treeNode);
                         var url = "http://10.17.90.101/piweb/YWQDDownload/" + name + " ";
-                        var a = document.createElement('a');
-                        a.setAttribute('download', '');
-                        a.setAttribute('target', '_blank');
-                        a.setAttribute('href', url);
-                        a.click();
+                        if (!!window.ActiveXObject || "ActiveXObject" in window) {
+                            window.open(url, '_blank');
+                        }
+                        else {
+                            var a = document.createElement('a');
+                            a.setAttribute('download', '');
+                            a.setAttribute('href', url);
+                            a.setAttribute("target", "_blank");
+                            a.click();
+                        }
                     }
                 }
 

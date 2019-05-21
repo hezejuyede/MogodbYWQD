@@ -4,23 +4,37 @@ window.onload = function () {
     getDivWidth();
     screenInfo();
     getMaxMin();
-    TimedRefresh();
     getObjectValue();
     setMessageHeight();
-};
+    screenWidth();
 
+};
+//全局定义定时器
+var timer;
+
+//根据浏览器固定宽度设置页面固定大小
+function screenWidth() {userLogin
+    var W = $(window).width();
+    var YWHome = $("#YWHome");
+    var userLogin = $("#userLogin")
+    if (W < 1200) {
+        YWHome.css("width","1200px");
+
+    }
+}
 
 //判断用户是否登录
 function getHome() {
+
     var NowUserStates = localStorage.getItem("UserStates");
     var NowUserInfos = localStorage.getItem("userInfos");
     NowUserInfos = JSON.parse(NowUserInfos);
     NowUserStates = JSON.parse(NowUserStates);
 
     if (NowUserStates === null) {
+        window.location="/admLogin.html";
         $("#noLogin").append(" <a href=\"/admLogin.html\"><img src='../icon/yh.png' style='height: 20px;margin-right: 10px'></img><span>管理员登录</span></a>");
         $("#noLogin").append(" <a href=\"/loginIndex.html\"><img src='../icon/adm.png' style='height: 20px;margin-right: 10px'></img><span>普通用户登录</span></a>");
-
     }
     else if (NowUserStates === 1) {
         $("#login").append("<div class=\"userName\" id=\"userName\"><img src='../icon/yh.png' style='height: 20px;margin-right: 10px'></img><span>" + NowUserInfos.username + "</span></div><div class=\"outLogin\"><img src='../icon/tc.png' style='height: 20px;margin-right: 5px'></img><span id=\"outLogin\">退出登录</span></div>");
@@ -32,6 +46,7 @@ function getHome() {
 
 }
 
+
 //动态获得 左中右的高度
 function getDivWidth() {
     var w = document.body.scrollHeight;
@@ -39,17 +54,10 @@ function getDivWidth() {
     var center = document.getElementById("main-center");
     var right = document.getElementById("main-right");
     var main = document.getElementById("main");
-
-    var H = window.screen.height;
-    var W = window.screen.width;
-    var F = W / H;
-
-    var K = window.screen.availWidth;
     main.style.height = (w - 60) + "px";
     left.style.height = (w - 60) + "px";
     center.style.height = (w - 60) + "px";
     right.style.height = (w - 60) + "px";
-
 }
 
 // 根据屏幕分辨率判断是否显示左右两侧
@@ -67,17 +75,6 @@ function screenInfo() {
     }
 }
 
-//根据设置时间定时刷新页面
-function TimedRefresh() {
-    var time = localStorage.getItem("time");
-    if (time !== null) {
-        $("#TimedRefresh").css("background-color", "#BEBEBE");
-        setInterval(function () {
-            window.location = "/"
-        }, time)
-
-    }
-}
 
 //加载判断哪个object
 function getObjectValue() {
@@ -112,7 +109,7 @@ function setMessageHeight() {
         message.css("height", "250px");
     }
     else {
-        message.css("height", "35px");
+        message.css("height", "60px");
     }
 
 
@@ -122,7 +119,7 @@ function setMessageHeight() {
 //需要进行前后台交互的区域开始
 
 
-// 向后台动态请求左侧树状导航栏地址
+//向后台动态请求左侧树状导航栏地址
 function getLeftNav() {
     jQuery.ajax({
         type: 'POST',
@@ -196,84 +193,8 @@ function getLeftNav() {
 //页面加载获得最大值最小值
 function getMaxMin() {
     var MaxMinValue = localStorage.getItem("MaxMinValue");
-    var timer = function (data, time) {
-        setInterval(function setMaxMinValue() {
-            jQuery.ajax({
-                type: 'GET',
-                url: 'http://10.176.124.10:57422/GetHisValues.ashx',
-                data: {"DATA": JSON.stringify(data)},
-                dataType: "jsonp",
-                jsonp: "callback",
-                jsonpCallback: "callBackName",
-                success: function (result) {
-                    var Value = localStorage.getItem("MaxMinValue");
-                    var jsonstrs = JSON.parse(Value.substr(1, Value.length));
-                    var valueList = jsonstrs.valueList;
-                    var centerList = $(".templateList-center");
-                    var leftList = $(".templateList-left");
-                    $(result).each(function (index, e) {
-                        $(centerList).each(function (i, el) {
-                            if (e.Tag.toLowerCase() === el.innerText.toLowerCase() && e.NState === 1) {
-
-                                var I = $(".templateList-center").index(el);
-                                $(leftList[I]).html("<div class=\"templateList-left fl\"><img src=\"icon/GT.png\" ></div>");
-                                $("#BJSY").html("<object height=\"1\" width=\"1\" classid=\"clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95\"><param id=\"DisplayURL\" name=\"FileName\" value=\"audio/BJ.mp3\" /></object>");
-                            }
-                            else if (e.Tag.toLowerCase() === el.innerText.toLowerCase() && e.NState === 2) {
-
-                                var I = $(".templateList-center").index(el);
-                                $(leftList[I]).html("<div class=\"templateList-left fl\"><img src=\"icon/CW.png\" ></div>");
-                                $("#BJSY").html("<object height=\"1\" width=\"1\" classid=\"clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95\"><param id=\"DisplayURL\" name=\"FileName\" value=\"audio/BJ.mp3\" /></object>");
-                            }
-                            else if (e.Tag.toLowerCase() === el.innerText.toLowerCase() && e.NState === -1) {
-
-                                var I = $(".templateList-center").index(el);
-                                $(leftList[I]).html("<div class=\"templateList-left fl\"><img src=\"icon/GT.png\" ></div>");
-                                $("#BJSY").html("<object height=\"1\" width=\"1\" classid=\"clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95\"><param id=\"DisplayURL\" name=\"FileName\" value=\"audio/BJ.mp3\" /></object>");
-                            }
-                            else if (e.Tag.toLowerCase() === el.innerText.toLowerCase() && e.NState === -2) {
-
-                                var I = $(".templateList-center").index(el);
-                                $(leftList[I]).html("<div class=\"templateList-left fl\"><img src=\"icon/CW.png\" ></div>");
-                                $("#BJSY").html("<object height=\"1\" width=\"1\" classid=\"clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95\"><param id=\"DisplayURL\" name=\"FileName\" value=\"audio/BJ.mp3\" /></object>");
-
-                            }
-                            $(valueList).each(function (ind, elm) {
-                                if (e.Tag.toLowerCase() === el.innerText.toLowerCase() && el.innerText.toLowerCase() === elm.Tag.toLowerCase() && e.NState === -1 && elm.xx === true) {
-                                    var I = $(".templateList-center").index(el);
-                                    $(leftList[I]).html("<div class=\"templateList-left fl\"><img src=\"icon/GT.png\" ></div>");
-                                    $("#BJSY").html("<object height=\"1\" width=\"1\" classid=\"clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95\"><param id=\"DisplayURL\" name=\"FileName\" value=\"audio/BJ.mp3\" /></object>");
-                                    alert("已经低于下限值")
-                                }
-                                else if (e.Tag.toLowerCase() === el.innerText.toLowerCase() && el.innerText.toLowerCase() === elm.Tag.toLowerCase() && e.NState === 1 && elm.sx === true) {
-
-                                    var I = $(".templateList-center").index(el);
-                                    $(leftList[I]).html("<div class=\"templateList-left fl\"><img src=\"icon/GT.png\" ></div>");
-                                    $("#BJSY").html("<object height=\"1\" width=\"1\" classid=\"clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95\"><param id=\"DisplayURL\" name=\"FileName\" value=\"audio/BJ.mp3\" /></object>");
-                                    alert("已经高于上限值")
-                                }
-                                else if (e.Tag.toLowerCase() === el.innerText.toLowerCase() && el.innerText.toLowerCase() === elm.Tag.toLowerCase() && e.NState === 2 && elm.zd === true) {
-
-                                    var I = $(".templateList-center").index(el);
-                                    $(leftList[I]).html("<div class=\"templateList-left fl\"><img src=\"icon/CW.png\" ></div>");
-                                    $("#BJSY").html("<object height=\"1\" width=\"1\" classid=\"clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95\"><param id=\"DisplayURL\" name=\"FileName\" value=\"audio/BJ.mp3\" /></object>");
-                                    alert("已经超过最高值")
-                                }
-                                else if (e.Tag.toLowerCase() === el.innerText.toLowerCase() && el.innerText.toLowerCase() === elm.Tag.toLowerCase() && e.NState === -2 && elm.zx === true) {
-
-                                    var I = $(".templateList-center").index(el);
-                                    $(leftList[I]).html("<div class=\"templateList-left fl\"><img src=\"icon/CW.png\" ></div>");
-                                    $("#BJSY").html("<object height=\"1\" width=\"1\" classid=\"clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95\"><param id=\"DisplayURL\" name=\"FileName\" value=\"audio/BJ.mp3\" /></object>");
-                                    alert("已经低于最低值")
-                                }
-                            })
-                        })
-                    });
-                }
-            });
-        }, time);
-    };
     if (MaxMinValue == null || MaxMinValue == "") {
+
     }
     else {
         var jsonstrs = JSON.parse(MaxMinValue.substr(1, MaxMinValue.length));
@@ -282,74 +203,13 @@ function getMaxMin() {
         $(valueList).each(function (index, e) {
             $("#MaxMinValueList").append("<div class=\"templateList\"><div class=\"templateList-left fl\"><img src=\"icon/ZQ.png\" alt=\"\"></div><div  class=\"templateList-center fl\"><span>" + e.Tag + "</span></div><div class=\"templateList-center-right fl\"><button class=\"Relieve\">删</button></div></div>");
         });
-        timer(valueList, 4000);
-    }
-}
-
-
-//监控最大值最小值
-$("#Monitor").click(function () {
-    var value = document.getElementById("value").value;
-    var max = document.getElementById("max").value;
-    var min = document.getElementById("min").value;
-    var sx = document.getElementById("szMax").value;
-    var xx = document.getElementById("szMin").value;
-
-    var zd = $("#ZD").is(":checked");
-    var zx = $("#ZX").is(":checked");
-    var s = $("#SX").is(":checked");
-    var x = $("#XX").is(":checked");
-
-    var M = Number(max);
-    var N = Number(min);
-    var S = Number(sx);
-    var X = Number(xx);
-
-    if (M <= N) {
-        alert("最小值大于最大值,请核对最小值和最大值")
-    }
-    else if (M <= S) {
-        alert("上限值大于最大值,请核对上限值和最大值")
-    }
-    else if (M <= X) {
-        alert("下限值大于最大值,请核对下限值和最大值")
-    }
-    else if (N >= S) {
-        alert("最小值大于上限值,请核对最小值和上限值")
-    }
-    else if (N >= X) {
-        alert("最小值大于下限值,请核对最小值和上限值")
-    }
-    else if (X >= S) {
-        alert("下限值大于上限值,请核对下限值和上限值")
-    }
-    else {
-        var utils = {
-            setParam: function (name, value) {
-                localStorage.setItem(name, value)
-            },
-            getParam: function (name) {
-                return localStorage.getItem(name)
-            }
-        };
-        var product = {
-            Tag: value,
-            Max: max,
-            Min: min,
-            Limith: sx,
-            Limitl: xx,
-            zd: zd,
-            zx: zx,
-            sx: s,
-            xx: x
-        };
-        var MaxMinValue = localStorage.getItem("MaxMinValue");
-        var timer = function (data, time) {
-            setInterval(function setMaxMinValue() {
+        var Time = localStorage.getItem("time");
+        if (Time === null || Time === "") {
+            timer = setInterval(function setMaxMinValue() {
                 jQuery.ajax({
                     type: 'GET',
-                    url: 'http://10.176.124.10:57422/GetHisValues.ashx',
-                    data: {"DATA": JSON.stringify(data)},
+                    url: 'http://10.176.124.10:8099/GetTagAlarm.ashx',
+                    data: {"DATA": JSON.stringify(valueList)},
                     dataType: "jsonp",
                     jsonp: "callback",
                     jsonpCallback: "callBackName",
@@ -391,108 +251,259 @@ $("#Monitor").click(function () {
                                         var I = $(".templateList-center").index(el);
                                         $(leftList[I]).html("<div class=\"templateList-left fl\"><img src=\"icon/GT.png\" ></div>");
                                         $("#BJSY").html("<object height=\"1\" width=\"1\" classid=\"clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95\"><param id=\"DisplayURL\" name=\"FileName\" value=\"audio/BJ.mp3\" /></object>");
-                                        alert("已经低于下限值")
+                                        var Name = e.Tag;
+                                        alert(Name + "已经低于下限值")
+
+
                                     }
                                     else if (e.Tag.toLowerCase() === el.innerText.toLowerCase() && el.innerText.toLowerCase() === elm.Tag.toLowerCase() && e.NState === 1 && elm.sx === true) {
 
                                         var I = $(".templateList-center").index(el);
                                         $(leftList[I]).html("<div class=\"templateList-left fl\"><img src=\"icon/GT.png\" ></div>");
                                         $("#BJSY").html("<object height=\"1\" width=\"1\" classid=\"clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95\"><param id=\"DisplayURL\" name=\"FileName\" value=\"audio/BJ.mp3\" /></object>");
-                                        alert("已经高于上限值")
+                                        var Name = e.Tag;
+                                        alert(Name + "已经高于上限值")
+
                                     }
                                     else if (e.Tag.toLowerCase() === el.innerText.toLowerCase() && el.innerText.toLowerCase() === elm.Tag.toLowerCase() && e.NState === 2 && elm.zd === true) {
 
                                         var I = $(".templateList-center").index(el);
                                         $(leftList[I]).html("<div class=\"templateList-left fl\"><img src=\"icon/CW.png\" ></div>");
                                         $("#BJSY").html("<object height=\"1\" width=\"1\" classid=\"clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95\"><param id=\"DisplayURL\" name=\"FileName\" value=\"audio/BJ.mp3\" /></object>");
-                                        alert("已经超过最高值")
+                                        var Name = e.Tag;
+                                        alert(Name + "已经超过最高值")
                                     }
                                     else if (e.Tag.toLowerCase() === el.innerText.toLowerCase() && el.innerText.toLowerCase() === elm.Tag.toLowerCase() && e.NState === -2 && elm.zx === true) {
 
                                         var I = $(".templateList-center").index(el);
                                         $(leftList[I]).html("<div class=\"templateList-left fl\"><img src=\"icon/CW.png\" ></div>");
                                         $("#BJSY").html("<object height=\"1\" width=\"1\" classid=\"clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95\"><param id=\"DisplayURL\" name=\"FileName\" value=\"audio/BJ.mp3\" /></object>");
-                                        alert("已经低于最低值")
+                                        var Name = e.Tag;
+                                        alert(Name + "已经低于最低值")
+
+
                                     }
                                 })
                             })
                         });
                     }
                 });
-            }, time);
-        };
-        if (MaxMinValue == null || MaxMinValue == "") {
-
-            var jsonstr = {
-                "valueList": [{
-                    Tag: value,
-                    Max: max,
-                    Min: min,
-                    Limith: sx,
-                    Limitl: xx,
-                    zd: zd,
-                    zx: zx,
-                    sx: s,
-                    xx: x
-                }]
-            };
-            utils.setParam("MaxMinValue", "'" + JSON.stringify(jsonstr));
-            var maxMinValue = utils.getParam("MaxMinValue");
-            var jsonstrs = JSON.parse(maxMinValue.substr(1, maxMinValue.length));
-            var valueList = jsonstrs.valueList;
-
-
-            $(valueList).each(function (index, e) {
-                $("#MaxMinValueList").append("<div class=\"templateList\"><div class=\"templateList-left fl\"><img src=\"icon/ZQ.png\" alt=\"\"></div><div  class=\"templateList-center fl\"><span>" + e.Tag + "</span></div><div class=\"templateList-center-right fl\"><button class=\"Relieve\">删</button></div></div>");
-            });
-
-            clearInterval(timer);
-            timer(valueList, 4000);
-            $("#modal").hide("slow");
-            $("#main").show("slow");
-            window.location = "/"
+            }, 15000);
         }
         else {
-            clearInterval(timer);
-            var jsonstr = JSON.parse(MaxMinValue.substr(1, MaxMinValue.length));
-            var valueList = jsonstr.valueList;
-            var result = false;
-            for (var i in valueList) {
-                if (valueList[i].Tag == value) {
-                    alert("该点已经被监听")
-                    result = true;
-                }
-            }
-            ;
-            if (!result) {
-                valueList.push({
-                    Tag: value,
-                    Max: max,
-                    Min: min,
-                    Limith: sx,
-                    Limitl: xx,
-                    zd: zd,
-                    zx: zx,
-                    sx: s,
-                    xx: x
+            var DcTime = Number(Time) * 1000;
+            timer = setInterval(function setMaxMinValue() {
+                jQuery.ajax({
+                    type: 'GET',
+                    url: 'http://10.176.124.10:8099/GetTagAlarm.ashx',
+                    data: {"DATA": JSON.stringify(valueList)},
+                    dataType: "jsonp",
+                    jsonp: "callback",
+                    jsonpCallback: "callBackName",
+                    success: function (result) {
+                        var Value = localStorage.getItem("MaxMinValue");
+                        var jsonstrs = JSON.parse(Value.substr(1, Value.length));
+                        var valueList = jsonstrs.valueList;
+                        var centerList = $(".templateList-center");
+                        var leftList = $(".templateList-left");
+                        $(result).each(function (index, e) {
+                            $(centerList).each(function (i, el) {
+                                if (e.Tag.toLowerCase() === el.innerText.toLowerCase() && e.NState === 1) {
+
+                                    var I = $(".templateList-center").index(el);
+                                    $(leftList[I]).html("<div class=\"templateList-left fl\"><img src=\"icon/GT.png\" ></div>");
+                                    $("#BJSY").html("<object height=\"1\" width=\"1\" classid=\"clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95\"><param id=\"DisplayURL\" name=\"FileName\" value=\"audio/BJ.mp3\" /></object>");
+                                }
+                                else if (e.Tag.toLowerCase() === el.innerText.toLowerCase() && e.NState === 2) {
+
+                                    var I = $(".templateList-center").index(el);
+                                    $(leftList[I]).html("<div class=\"templateList-left fl\"><img src=\"icon/CW.png\" ></div>");
+                                    $("#BJSY").html("<object height=\"1\" width=\"1\" classid=\"clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95\"><param id=\"DisplayURL\" name=\"FileName\" value=\"audio/BJ.mp3\" /></object>");
+                                }
+                                else if (e.Tag.toLowerCase() === el.innerText.toLowerCase() && e.NState === -1) {
+
+                                    var I = $(".templateList-center").index(el);
+                                    $(leftList[I]).html("<div class=\"templateList-left fl\"><img src=\"icon/GT.png\" ></div>");
+                                    $("#BJSY").html("<object height=\"1\" width=\"1\" classid=\"clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95\"><param id=\"DisplayURL\" name=\"FileName\" value=\"audio/BJ.mp3\" /></object>");
+                                }
+                                else if (e.Tag.toLowerCase() === el.innerText.toLowerCase() && e.NState === -2) {
+
+                                    var I = $(".templateList-center").index(el);
+                                    $(leftList[I]).html("<div class=\"templateList-left fl\"><img src=\"icon/CW.png\" ></div>");
+                                    $("#BJSY").html("<object height=\"1\" width=\"1\" classid=\"clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95\"><param id=\"DisplayURL\" name=\"FileName\" value=\"audio/BJ.mp3\" /></object>");
+
+                                }
+                                $(valueList).each(function (ind, elm) {
+                                    if (e.Tag.toLowerCase() === el.innerText.toLowerCase() && el.innerText.toLowerCase() === elm.Tag.toLowerCase() && e.NState === -1 && elm.xx === true) {
+                                        var I = $(".templateList-center").index(el);
+                                        $(leftList[I]).html("<div class=\"templateList-left fl\"><img src=\"icon/GT.png\" ></div>");
+                                        $("#BJSY").html("<object height=\"1\" width=\"1\" classid=\"clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95\"><param id=\"DisplayURL\" name=\"FileName\" value=\"audio/BJ.mp3\" /></object>");
+                                        var Name = e.Tag;
+                                        alert(Name + "已经低于下限值")
+
+
+                                    }
+                                    else if (e.Tag.toLowerCase() === el.innerText.toLowerCase() && el.innerText.toLowerCase() === elm.Tag.toLowerCase() && e.NState === 1 && elm.sx === true) {
+
+                                        var I = $(".templateList-center").index(el);
+                                        $(leftList[I]).html("<div class=\"templateList-left fl\"><img src=\"icon/GT.png\" ></div>");
+                                        $("#BJSY").html("<object height=\"1\" width=\"1\" classid=\"clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95\"><param id=\"DisplayURL\" name=\"FileName\" value=\"audio/BJ.mp3\" /></object>");
+                                        var Name = e.Tag;
+                                        alert(Name + "已经高于上限值")
+
+                                    }
+                                    else if (e.Tag.toLowerCase() === el.innerText.toLowerCase() && el.innerText.toLowerCase() === elm.Tag.toLowerCase() && e.NState === 2 && elm.zd === true) {
+
+                                        var I = $(".templateList-center").index(el);
+                                        $(leftList[I]).html("<div class=\"templateList-left fl\"><img src=\"icon/CW.png\" ></div>");
+                                        $("#BJSY").html("<object height=\"1\" width=\"1\" classid=\"clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95\"><param id=\"DisplayURL\" name=\"FileName\" value=\"audio/BJ.mp3\" /></object>");
+                                        var Name = e.Tag;
+                                        alert(Name + "已经超过最高值")
+                                    }
+                                    else if (e.Tag.toLowerCase() === el.innerText.toLowerCase() && el.innerText.toLowerCase() === elm.Tag.toLowerCase() && e.NState === -2 && elm.zx === true) {
+
+                                        var I = $(".templateList-center").index(el);
+                                        $(leftList[I]).html("<div class=\"templateList-left fl\"><img src=\"icon/CW.png\" ></div>");
+                                        $("#BJSY").html("<object height=\"1\" width=\"1\" classid=\"clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95\"><param id=\"DisplayURL\" name=\"FileName\" value=\"audio/BJ.mp3\" /></object>");
+                                        var Name = e.Tag;
+                                        alert(Name + "已经低于最低值")
+
+
+                                    }
+                                })
+                            })
+                        });
+                    }
                 });
-            }
-            ;
-            utils.setParam("MaxMinValue", "'" + JSON.stringify(jsonstr));
-            var maxMinValue = utils.getParam("MaxMinValue");
-            var jsonstrs = JSON.parse(maxMinValue.substr(1, maxMinValue.length));
-            var valueList = jsonstrs.valueList;
-            $("#MaxMinValueList").empty();
-            $(valueList).each(function (index, e) {
-                $("#MaxMinValueList").append("<div class=\"templateList\"><div class=\"templateList-left fl\"><img src=\"icon/ZQ.png\" alt=\"\"></div><div class=\"templateList-center fl\"><span>" + e.Tag + "</span></div><div class=\"templateList-center-right fl\"><button class=\"Relieve\">删</button></div></div>");
-            });
-            timer(valueList, 4000);
-            $("#modal").hide("slow");
-            $("#main").show("slow");
-            window.location = "/"
+            }, DcTime);
         }
     }
+}
 
+
+//监控最大值最小值
+$("#Monitor").click(function () {
+    var reg = /^[0-9]+.?[0-9]*$/;
+
+    var value = document.getElementById("value").value;
+    var max = document.getElementById("max").value;
+    var min = document.getElementById("min").value;
+    var sx = document.getElementById("szMax").value;
+    var xx = document.getElementById("szMin").value;
+    var TcSj = document.getElementById("TcSj").value;
+
+    if (TcSj && reg.test(TcSj)) {
+        localStorage.setItem("time", TcSj);
+    }
+    else if (TcSj && !reg.test(TcSj)) {
+        alert("定时监控只能输入数字，否则按默认时间监控")
+    }
+
+    if (!reg.test(max) || !reg.test(min) || !reg.test(sx) || !reg.test(xx)) {
+
+        alert("最大值，最小值，上限值，下限值，只能输入数字")
+
+    }
+    else {
+        var zd = $("#ZD").is(":checked");
+        var zx = $("#ZX").is(":checked");
+        var s = $("#SX").is(":checked");
+        var x = $("#XX").is(":checked");
+        var M = Number(max);
+        var N = Number(min);
+        var S = Number(sx);
+        var X = Number(xx);
+        if (M <= N) {
+            alert("最小值大于最大值,请核对最小值和最大值")
+        }
+        else if (M <= S) {
+            alert("上限值大于最大值,请核对上限值和最大值")
+        }
+        else if (M <= X) {
+            alert("下限值大于最大值,请核对下限值和最大值")
+        }
+        else if (N >= S) {
+            alert("最小值大于上限值,请核对最小值和上限值")
+        }
+        else if (N >= X) {
+            alert("最小值大于下限值,请核对最小值和上限值")
+        }
+        else if (X >= S) {
+            alert("下限值大于上限值,请核对下限值和上限值")
+        }
+        else {
+            var utils = {
+                setParam: function (name, value) {
+                    localStorage.setItem(name, value)
+                },
+                getParam: function (name) {
+                    return localStorage.getItem(name)
+                }
+            };
+            var MaxMinValue = localStorage.getItem("MaxMinValue");
+            if (MaxMinValue == null || MaxMinValue == "") {
+                var jsonstr = {
+                    "valueList": [{
+                        Tag: value,
+                        Max: max,
+                        Min: min,
+                        Limith: sx,
+                        Limitl: xx,
+                        zd: zd,
+                        zx: zx,
+                        sx: s,
+                        xx: x,
+                        TcSj: TcSj,
+                    }]
+                };
+                utils.setParam("MaxMinValue", "'" + JSON.stringify(jsonstr));
+                var maxMinValue = utils.getParam("MaxMinValue");
+                var jsonstrs = JSON.parse(maxMinValue.substr(1, maxMinValue.length));
+                var valueList = jsonstrs.valueList;
+                $(valueList).each(function (index, e) {
+                    $("#MaxMinValueList").append("<div class=\"templateList\"><div class=\"templateList-left fl\"><img src=\"icon/ZQ.png\" alt=\"\"></div><div  class=\"templateList-center fl\"><span>" + e.Tag + "</span></div><div class=\"templateList-center-right fl\"><button class=\"Relieve\">删</button></div></div>");
+                });
+                $("#modal").hide("slow");
+                $("#main").show("slow");
+                window.location = "/"
+            }
+            else {
+                var jsonstr = JSON.parse(MaxMinValue.substr(1, MaxMinValue.length));
+                var valueList = jsonstr.valueList;
+                var result = false;
+                for (var i in valueList) {
+                    if (valueList[i].Tag == value) {
+                        alert("该点已经被监听");
+                        result = true;
+                    }
+                }
+                if (!result) {
+                    valueList.push({
+                        Tag: value,
+                        Max: max,
+                        Min: min,
+                        Limith: sx,
+                        Limitl: xx,
+                        zd: zd,
+                        zx: zx,
+                        sx: s,
+                        xx: x
+                    });
+                }
+                utils.setParam("MaxMinValue", "'" + JSON.stringify(jsonstr));
+                var maxMinValue = utils.getParam("MaxMinValue");
+                var jsonstrs = JSON.parse(maxMinValue.substr(1, maxMinValue.length));
+                var valueList = jsonstrs.valueList;
+                $("#MaxMinValueList").empty();
+                $(valueList).each(function (index, e) {
+                    $("#MaxMinValueList").append("<div class=\"templateList\"><div class=\"templateList-left fl\"><img src=\"icon/ZQ.png\" alt=\"\"></div><div class=\"templateList-center fl\"><span>" + e.Tag + "</span></div><div class=\"templateList-center-right fl\"><button class=\"Relieve\">删</button></div></div>");
+                });
+                $("#modal").hide("slow");
+                $("#main").show("slow");
+                window.location = "/"
+            }
+        }
+    }
 
 });
 
@@ -568,7 +579,9 @@ $("#send").click(function () {
 //查看单个监控点的详情
 
 $(".templateList-center").live("click", function () {
-    var c = $(".templateList-center").text();
+    var index = $(".templateList-center").index(this);
+    var b = document.getElementsByClassName("templateList-center")[index];
+    var c = b.innerText;
     window.location = "/value.html?" + c
 });
 
@@ -582,40 +595,6 @@ $("#ShowAllMonitor").click(function () {
     else {
         window.location = "/allValue.html"
     }
-
-});
-
-
-//设置定时刷新页面
-$("#TimedRefresh").click(function () {
-    var time = document.getElementById("time").value;
-    var t = parseInt(time);
-    if (time.length > 0 && typeof(t) === "number" && t > 0) {
-        var T = time * 60000;
-        localStorage.setItem("time", T);
-        $("#TimedRefresh").css("background-color", "#BEBEBE");
-        alert("设置定时刷新成功");
-        window.location = "/"
-    }
-    else {
-        alert("输入时间不正确")
-    }
-
-});
-
-
-//解除定时刷新页面
-$("#removeTimedRefresh").click(function () {
-    var time = localStorage.getItem("time");
-    if (time === null) {
-        alert("您未设置定时刷新")
-    }
-    else {
-        localStorage.removeItem("time");
-        alert("已经解除定时刷新");
-        window.location = "/"
-    }
-
 
 });
 
@@ -637,7 +616,8 @@ $(".Relieve").live("click", function () {
         var jsonstrss = JSON.parse(maxMinValue.substr(1, maxMinValue.length));
         var valueListss = jsonstrss.valueList;
         if (valueListss.length === 0) {
-            localStorage.removeItem("MaxMinValue")
+            localStorage.removeItem("MaxMinValue");
+            localStorage.removeItem("time");
         }
         window.location = "/"
     }
@@ -702,7 +682,6 @@ $("#leftChange").click(function () {
         else if (L.style.display === "block" && R.style.display === "none") {
             left.hide("slow");
             center.css("width", "100%");
-            /*window.location = "/"*/
 
 
         }
@@ -721,7 +700,6 @@ $("#leftChange").click(function () {
         else if (L.style.display === "" && R.style.display === "none") {
             left.hide("slow");
             center.css("width", "100%");
-            /*  window.location = "/"*/
 
         }
     }
@@ -738,7 +716,6 @@ $("#leftChange").click(function () {
             left.show("slow");
             left.css({"overflow-y": "auto", "overflow-x": "auto"});
             center.css("width", "70%");
-            /* window.location = "/"*/
         }
         else if (L.style.display === "block" && R.style.display === "block") {
             left.hide("slow");
@@ -748,7 +725,6 @@ $("#leftChange").click(function () {
             left.show("slow");
             left.css({"overflow-y": "auto", "overflow-x": "auto"});
             center.css("width", "70%");
-            /*window.location = "/"*/
         }
         else if (L.style.display === "block" && R.style.display === "none") {
             left.hide("slow");
@@ -784,8 +760,6 @@ $("#rightChange").click(function () {
     var H = window.screen.height;
     var W = window.screen.width;
     var F = W / H;
-
-
     if (F > 1.24 && F < 1.4) {
         if (L.style.display === "" && R.style.display === "") {
             right.hide("slow");
@@ -800,7 +774,6 @@ $("#rightChange").click(function () {
         else if (L.style.display === "none" && R.style.display === "") {
             right.hide("slow");
             center.css("width", "100%");
-            /*  window.location = "/"*/
 
         }
         else if (L.style.display === "block" && R.style.display === "block") {
@@ -811,7 +784,6 @@ $("#rightChange").click(function () {
         else if (L.style.display === "none" && R.style.display === "block") {
             right.hide("slow");
             center.css("width", "100%");
-            /* window.location = "/"*/
 
         }
         else if (L.style.display === "block" && R.style.display === "none") {
@@ -861,7 +833,6 @@ $("#rightChange").click(function () {
         else if (L.style.display === "block" && R.style.display === "none") {
             right.show("slow");
             center.css("width", "70%");
-            /*window.location = "/"*/
         }
         else if (L.style.display === "none" && R.style.display === "none") {
             right.show("slow");
@@ -874,7 +845,7 @@ $("#rightChange").click(function () {
         else if (L.style.display === "" && R.style.display === "none") {
             right.show("slow");
             center.css("width", "70%");
-            /*  window.location = "/"*/
+
         }
     }
 
@@ -1000,13 +971,13 @@ $("#ShowMonitor").click(function () {
 $("#modal-GB").click(function () {
     $("#modal").hide("slow");
     $("#main").show("slow");
-    window.location = "/"
 });
 
 
 //F11全屏显示
 $(document).keydown(function (event) {
     if (event.keyCode === 122) {
+        window.location="/";
         var w = window.screen.availHeight;
         var left = document.getElementById("main-left");
         var center = document.getElementById("main-center");
@@ -1021,15 +992,7 @@ $(document).keydown(function (event) {
 //监控退出全屏
 window.onresize = function () {
     if (!checkFull()) {
-        var w = document.body.scrollHeight;
-        var left = document.getElementById("main-left");
-        var center = document.getElementById("main-center");
-        var right = document.getElementById("main-right");
-
-        left.style.height = (w - 60) + "px";
-        center.style.height = (w - 60) + "px";
-        right.style.height = (w - 60) + "px";
-
+      window.location="/"
     }
 };
 
@@ -1040,4 +1003,29 @@ function checkFull() {
 }
 
 
+//暂停监控
+$("#stopDiv").click(function () {
+    if (timer === undefined) {
+        alert("监控没有启动，无需暂停")
+    }
+    else {
+        clearInterval(timer);
+        alert("已暂停监控")
+    }
 
+
+});
+
+
+//继续监控
+$("#startDiv").click(function () {
+    var MaxMinValue = localStorage.getItem("MaxMinValue");
+    if (MaxMinValue == null || MaxMinValue == "") {
+      alert("检查没有监控点，无法启动")
+    }
+    else {
+        getMaxMin();
+        alert("已开启继续监控")
+    }
+
+});
