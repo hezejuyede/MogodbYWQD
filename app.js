@@ -26,6 +26,8 @@ app.post("/HomeLeftNav", IndexRouter.YWHomeLeftNav);            //请求左侧�
 
 app.post("/HomeRightNav", IndexRouter.HomeRightNav);            //请求右侧侧导航
 
+app.post("/getPdiList", IndexRouter.getPdiList);            //请求右侧侧导航
+
 
 app.post("/getObjectData", IndexRouter.getObjectData);           //动态请求Object
 

@@ -262,7 +262,7 @@
                             list.push(json)
                         }
                     }
-                    localStorage.setItem("ztreeList",list);
+                    localStorage.setItem("ztreeList", "'" + JSON.stringify(list));
                 }
 
                 var t = $("#rightTree");
@@ -283,24 +283,25 @@
     $("#submission").click(function () {
         var name = localStorage.getItem("ztreeName");
         var pdi = localStorage.getItem("ztreeList");
+        var jpdi = JSON.parse(pdi.substr(1, pdi.length));
         if (name && pdi) {
             jQuery.ajax({
                 type: 'POST',
                 url: 'savePdi',
                 contentType: "application/x-www-form-urlencoded",
-                data: {"name": name, "pdi": JSON.stringify(pdi)},
+                data: {"name": name, "pdi":JSON.stringify(jpdi)},
                 dataType: 'json',
                 success: function (data) {
                     if (data.state) {
                         localStorage.removeItem("ztreeList");
                         localStorage.removeItem("ztreeName");
-                        alert(data.message);
-                        window.location.reload();
+                        alert(data.messages);
+                        /*window.location.reload();*/
                     }
                     else {
                         localStorage.removeItem("ztreeList");
                         localStorage.removeItem("ztreeName");
-                        alert(data.message);
+                        alert(data.messages);
                     }
                 }
             });

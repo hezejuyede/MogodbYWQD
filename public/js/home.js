@@ -131,71 +131,81 @@ function setMessageHeight() {
 
 //向后台动态请求左侧树状导航栏地址
 function getLeftNav() {
-    jQuery.ajax({
-        type: 'POST',
-        url: 'HomeLeftNav',
-        contentType: "application/x-www-form-urlencoded",
-        dataType: 'json',
-        success: function (data) {
-            var setting = {
-                data: {
-                    simpleData: {
-                        enable: true,
-                        idKey: "id",
-                        pIdKey: "pId",
-                        rootPId: ""
-                    }
-                },
-                view: {
-                    dblClickExpand: false
-                },
-                callback: {
-                    onClick: zTreeOnClick
-                }
-            };
+    var NowUserInfos = localStorage.getItem("userInfos");
+    NowUserInfos = JSON.parse(NowUserInfos);
+    if(NowUserInfos === null){
 
-            function zTreeOnClick(event, treeId, treeNode) {
-                var zTree = $.fn.zTree.getZTreeObj("tree");
-                zTree.expandNode(treeNode);
-                nodes = zTree.getSelectedNodes();
-                var node = nodes[0];
-                if (!node.isParent) {
-                    function getFilePath(treeObj) {
-                        if (treeObj == null) return "";
-                        var filename = treeObj.name;
-                        var pNode = treeObj.getParentNode();
-                        if (pNode != null) {
-                            filename = getFilePath(pNode) + "/" + filename;
+    }
+    else {
+        var name =NowUserInfos.username;
+        jQuery.ajax({
+            type: 'POST',
+            url: 'getPdiList',
+            contentType: "application/x-www-form-urlencoded",
+            dataType: 'json',
+            data:{"name":name},
+            success: function (data) {
+                var setting = {
+                    data: {
+                        simpleData: {
+                            enable: true,
+                            idKey: "id",
+                            pIdKey: "pId",
+                            rootPId: ""
                         }
-                        return filename;
+                    },
+                    view: {
+                        dblClickExpand: false
+                    },
+                    callback: {
+                        onClick: zTreeOnClick
                     }
+                };
 
-                    jQuery.ajax({
-                        type: 'POST',
-                        url: 'getObjectData',
-                        data: {
-                            "name": getFilePath(treeNode),
-                        },
-                        contentType: "application/x-www-form-urlencoded",
-                        dataType: 'json',
-                        success: function (data) {
-                            var URL = data;
-                            URL = JSON.stringify(URL);
-                            localStorage.setItem("URL", URL);
-                            var url = localStorage.getItem("URL", URL);
-                            u = JSON.parse(url);
-                            url = encodeURI(u);
-                            $("#iframe").html("<object classid=\"clsid:4F26B906-2854-11D1-9597-00A0C931BFC8\" id=\"Pbd1\" width=\"100%\" height=\"100%\"><param name=\"_cx\" value=\"24262\"><param name=\"_cy\" value=\"16140\"><param name=\"ServerIniURL\" value><param name=\"DisplayURL\" value='http://"+ ip+ "/piweb/YWQD/" + url + ".PDI'></object>")
+                function zTreeOnClick(event, treeId, treeNode) {
+                    var zTree = $.fn.zTree.getZTreeObj("tree");
+                    zTree.expandNode(treeNode);
+                    nodes = zTree.getSelectedNodes();
+                    var node = nodes[0];
+                    if (!node.isParent) {
+                        function getFilePath(treeObj) {
+                            if (treeObj == null) return "";
+                            var filename = treeObj.name;
+                            var pNode = treeObj.getParentNode();
+                            if (pNode != null) {
+                                filename = getFilePath(pNode) + "/" + filename;
+                            }
+                            return filename;
                         }
-                    });
+
+                        jQuery.ajax({
+                            type: 'POST',
+                            url: 'getObjectData',
+                            data: {
+                                "name": getFilePath(treeNode),
+                            },
+                            contentType: "application/x-www-form-urlencoded",
+                            dataType: 'json',
+                            success: function (data) {
+                                var URL = data;
+                                URL = JSON.stringify(URL);
+                                localStorage.setItem("URL", URL);
+                                var url = localStorage.getItem("URL", URL);
+                                u = JSON.parse(url);
+                                url = encodeURI(u);
+                                $("#iframe").html("<object classid=\"clsid:4F26B906-2854-11D1-9597-00A0C931BFC8\" id=\"Pbd1\" width=\"100%\" height=\"100%\"><param name=\"_cx\" value=\"24262\"><param name=\"_cy\" value=\"16140\"><param name=\"ServerIniURL\" value><param name=\"DisplayURL\" value='http://"+ ip+ "/piweb/YWQD/" + url + ".PDI'></object>")
+                            }
+                        });
+                    }
                 }
+
+                var t = $("#tree");
+                var list = JSON.parse(data);
+                t = $.fn.zTree.init(t, setting, list);
             }
+        });
+    }
 
-            var t = $("#tree");
-            var list = JSON.parse(data);
-            t = $.fn.zTree.init(t, setting, list);
-        }
-    });
 
 }
 

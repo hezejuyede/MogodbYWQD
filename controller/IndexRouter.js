@@ -412,7 +412,7 @@ exports.admRegister = function (req, res, next) {
     })
 };
 
-//管理员登录
+//保存PDI
 exports.savePdi = function (req, res, next) {
     var form = new formidable.IncomingForm();
     form.parse(req, function (err, fields) {
@@ -464,7 +464,28 @@ exports.savePdi = function (req, res, next) {
     })
 };
 
+//获得PDI表格
+exports.getPdiList = function (req, res, next) {
+    var form = new formidable.IncomingForm();
+    form.parse(req, function (err, fields) {
+        var name = fields.name;
+        if(name){
+            mongodb.find("pdiList", {"username": name}, (err, result) => {
+                if (result.length === 0) {
+                    console.log(err);
+                    return;
+                }
+                else {
+                    res.json(result[0].list)
+                }
+            })
+        }
+        else {
+            console.log(err)
+        }
+    })
 
+};
 
 //左侧导航
 exports.YWHomeLeftNav = function (req, res, next) {
