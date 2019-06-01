@@ -241,10 +241,28 @@
                 };
 
                 function zTreeOnCheck(event, treeId, treeNode) {
-                    console.log(event)
-                    console.log(treeId)
-                    console.log(treeNode)
-
+                    var treeObj = $.fn.zTree.getZTreeObj("rightTree"),
+                        nodes = treeObj.getCheckedNodes(true);
+                    var list =[];
+                    for (var i=0;i<nodes.length;i++){
+                        if (nodes[i].pId===""){
+                            let json = {
+                                "id":nodes[i].id,
+                                "pId":0,
+                                "name":nodes[i].name
+                            };
+                            list.push(json)
+                        }
+                        else {
+                            let json = {
+                                "id":nodes[i].id,
+                                "pId":nodes[i].pId,
+                                "name":nodes[i].name
+                            };
+                            list.push(json)
+                        }
+                    }
+                    localStorage.setItem("ztreeList",list);
                 }
 
                 var t = $("#rightTree");
@@ -264,15 +282,26 @@
     //确认提交
     $("#submission").click(function () {
         var name = localStorage.getItem("ztreeName");
-        var pdi = localStorage.getItem("pdi");
+        var pdi = localStorage.getItem("ztreeList");
         if (name && pdi) {
             jQuery.ajax({
                 type: 'POST',
                 url: 'savePdi',
                 contentType: "application/x-www-form-urlencoded",
-                data: {"name": name, "pdi": pdi},
+                data: {"name": name, "pdi": JSON.stringify(pdi)},
                 dataType: 'json',
                 success: function (data) {
+                    if (data.state) {
+                        localStorage.removeItem("ztreeList");
+                        localStorage.removeItem("ztreeName");
+                        alert(data.message);
+                        window.location.reload();
+                    }
+                    else {
+                        localStorage.removeItem("ztreeList");
+                        localStorage.removeItem("ztreeName");
+                        alert(data.message);
+                    }
                 }
             });
         }

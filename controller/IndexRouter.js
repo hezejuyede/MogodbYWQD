@@ -412,6 +412,58 @@ exports.admRegister = function (req, res, next) {
     })
 };
 
+//管理员登录
+exports.savePdi = function (req, res, next) {
+    var form = new formidable.IncomingForm();
+    form.parse(req, function (err, fields) {
+        var name = fields.name;
+        var pdi = fields.pdi;
+        if(name){
+            mongodb.find("pdiList", {"username": name}, (err, result) => {
+                if (result.length === 0) {
+                    mongodb.insertOne("pdiList", {
+                        "username": name,
+                        "list": pdi
+                    }, function (err, result) {
+                        if (err) {
+                            console.log(err);
+                            return;
+                        }
+                        else {
+                            res.json({"state": "1", "data": [], "messages": "设置成功"});
+                        }
+                    })
+                }
+                else {
+                    mongodb.deleteMany("pdiList", { "username": name,}, function (err, result) {
+                        if (err) {
+                            console.log(err);
+                            return;
+                        }
+                        else {
+                            mongodb.insertOne("pdiList", {
+                                "username": name,
+                                "list": pdi
+                            }, function (err, result) {
+                                if (err) {
+                                    console.log(err);
+                                    return;
+                                }
+                                else {
+                                    res.json({"state": "1", "data": [], "messages": "设置成功"});
+                                }
+                            })
+                        }
+                    });
+                }
+            })
+        }
+        else {
+            console.log(err)
+        }
+    })
+};
+
 
 
 //左侧导航

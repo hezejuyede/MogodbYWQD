@@ -31,6 +31,9 @@ app.post("/getObjectData", IndexRouter.getObjectData);           //动态请求O
 
 app.post("/UserSay", IndexRouter.UserSay);                      //客户发送的信息
 
+
+app.post("/savePdi", IndexRouter.savePdi);                      //客户发送的信息
+
 app.post("/userRegister", IndexRouter.userRegister);             //用户注册
 
 app.post("/admRegister", IndexRouter.admRegister);               //管理员用户注册
@@ -39,15 +42,12 @@ app.post("/getMessageList", IndexRouter.getMessageList);         //动态获取�
 
 app.post("/deleteMessage", IndexRouter.deleteMessage);           //动态获取留言详情
 
-
-
 app.post("/downloadList", IndexRouter.downloadList);              //获取下载列表
 
+app.get("/inputData", IndexRouter.inputData);           //动态获取留言详情
 
 app.get("/inputData", IndexRouter.inputData);           //动态获取留言详情
 
-
-app.get("/inputData", IndexRouter.inputData);           //动态获取留言详情
 app.post("/setData", IndexRouter.setData);           //动态获取留言详情
 
 
