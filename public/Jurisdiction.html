@@ -8,164 +8,66 @@
     <title>四川广安发电有限责任公司监控主页</title>
     <link rel="stylesheet" type="text/css" href="./css/base.css">
     <link rel="stylesheet" type="text/css" href="./css/index.css">
-    <script src="js/jquery-1.4.4.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/zTreeStyle.css">
     <!--[if IE]>
     <script src="js/html5shiv.js"></script>
     <![endif]-->
     <style>
-        .paging {
-            display: inline-block;
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-
-        .pp {
-            display: inline-block;
-            background: #f9f9f9;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-
-        .paging ul {
-            padding: 0;
-            margin: 0;
-            display: inline-block;
-            float: left;
-        }
-
-        .paging li {
-            display: inline-block;
-            float: left;
-            padding: 6px 12px;
-            cursor: pointer;
-        }
-
-        .paging li:hover {
-            background-color: #ddd;
-        }
-
-        .paging-selecte {
-            background-color: #4CAF50 !important;
-            color: #fff !important;
-        }
-
-        .paging-selecte:hover {
-            background-color: #4CAF50 !important;
-            color: #fff !important;
-        }
-
-        .paging input[type='text'], .paging input[type='button'] {
-            display: inline-block;
-            margin-top: 0px;
-            border: 1px solid #ccc;
-        }
-
-        .paging input[type='text'] {
-            height: 25px;
-            width: 50px;
-            border-right: none;
-        }
-
-        .paging input[type='button'] {
-            height: 29px;
-            border-left: none;
-            background-color: #fff;
-            cursor: pointer;
-        }
-
-        .paging ul:nth-child(2) {
-            margin-left: 10px;
-        }
-
-        .a {
-            font-family: "Microsoft YaHei", "微软雅黑", "Lantinghei SC", "Open Sans", Arial, "Hiragino Sans GB", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif;
-            text-align: center;
-            margin: 0 200px;
-            margin-top: 70px;
-            background-color: #fff;
-            min-height: 300px;
-            border-radius: 10px;
-            font-size: 16px;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-
-        .a p {
-            text-align: left;
-            margin: 15px 100px;
-            line-height: 30px;
-        }
-
-        body {
-            background-color: #f0f0f0;
-        }
 
         .header-right {
             line-height: 40px;
             color: #ffffff;
             cursor: pointer;
         }
-
-        .centerPage {
-            width: 95%;
+        .centerTop{
+            width: 100%;
             height: 85%;
-            margin: 0 auto;
-            padding-top: 10px;
-        }
+            border-bottom: 1px solid #F0F0F0;
 
-        .messageTemplate {
-            height: 9%;
-            background-color: #ffffff;
-            margin-bottom: 0.5%;
-            box-sizing: border-box;
-            cursor: pointer;
         }
+        .centerTopLeft{
+            width: 20%;
+            height: 100%;
+            border-right: 1px solid #F0F0F0;
 
-        .TemplateTop {
+
+        }
+        .centerTopRight{
+            width: 60%;
+            height: 100%;
+
+
+        }
+        .centerBottom{
             width: 100%;
-            height: 35%;
-            background-color:  #84AF9B;
-            font-size: 12px;
+            height: 15%;
+            position: relative;
         }
-
-        .TemplateTopLeftName {
-            margin-left: 20px;
-            color: #ffffff;
-            margin-right: 20px;
-        }
-
-        .TemplateTopLeftPhone {
-            color: #ffffff;
-        }
-
-        .TemplateDelete {
-            margin-left: 20px;
-            color: #c81623;
-            margin-right: 20px;
-        }
-
-        .TemplateTime {
-            color: #ffffff;
-        }
-
-        .TemplateBottom {
-            padding-left: 2%;
-            font-size: 10px;
-            line-height: 15px;
-            color: #232323;
-            overflow-y: auto;
-        }
-
-        .paginationDiv {
-            width: 100%;
-            margin: 0 auto;
-            text-align: center;
+        .buttonDiv{
+            width:200px;
+            height: 50px;
+            margin: auto;
             position: absolute;
-            bottom: 25px;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+
         }
+        .submission{
+            width: 200px;
+            height: 50px;
+            background-color: #67C23A;
+            color: #ffffff;
+            font-size: 18px;
+            line-height:50px ;
+            border-radius: 10px;
+            cursor: pointer;
+            border: none;
+            margin: 0 auto;
+        }
+
+
 
         .footer {
             background-color: #BEBEBE;
@@ -183,17 +85,32 @@
         </div>
     </div>
     <div class="center" id="center">
+        <div class="centerTop">
+            <div class="centerTopLeft fl">
+                <div class="leftTree" id="leftTree"></div>
+            </div>
+            <div class="centerTopRight fl">
+                <div class="rightTree" id="rightTree"></div>
+            </div>
+        </div>
+        <div class="centerBottom">
+            <div class="buttonDiv">
+                <button class="submission" id="submission">提交</button>
+            </div>
 
+        </div>
     </div>
     <div class="footer">
         <p class="">Copyright © 2018 青岛海湾化学有限公司 版权所有</p>
     </div>
 
 </div>
-
+<script src="js/jquery-1.4.4.min.js"></script>
+<script src="js/jquery.ztree.all.min.js"></script>
 <script>
     window.onload = function () {
         getDivWidth();
+        getLeftNav();
     };
 
     //动态获得 中间的高度
@@ -204,6 +121,43 @@
 
     }
 
+
+    //向后台动态请求左侧树状导航栏地址
+    function getLeftNav() {
+        jQuery.ajax({
+            type: 'POST',
+            url: 'HomeLeftNav',
+            contentType: "application/x-www-form-urlencoded",
+            dataType: 'json',
+            success: function (data) {
+                var setting = {
+                    data: {
+                        simpleData: {
+                            enable: true,
+                            idKey: "id",
+                            pIdKey: "pId",
+                            rootPId: ""
+                        }
+                    },
+                    view: {
+                        dblClickExpand: false
+                    },
+                    callback: {
+                        onClick: zTreeOnClick
+                    }
+                };
+
+                function zTreeOnClick(event, treeId, treeNode) {
+
+                }
+
+                var t = $("#rightTree");
+                var list = JSON.parse(data);
+                t = $.fn.zTree.init(t, setting, list);
+            }
+        });
+
+    }
 
 
     //返回主页

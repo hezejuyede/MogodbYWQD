@@ -40,7 +40,7 @@ function getHome() {
     NowUserStates = JSON.parse(NowUserStates);
 
     if (NowUserStates === null) {
-        window.location="/loginIndex.html";
+        window.location="/admLogin.html";
         $("#noLogin").append(" <a href=\"/admLogin.html\"><img src='../icon/yh.png' style='height: 20px;margin-right: 10px'></img><span>管理员登录</span></a>");
         $("#noLogin").append(" <a href=\"/loginIndex.html\"><img src='../icon/adm.png' style='height: 20px;margin-right: 10px'></img><span>普通用户登录</span></a>");
     }
@@ -648,7 +648,7 @@ $("#Message").live("click", function () {
     window.location = ("/MessageBoard.html?" + 1)
 });
 
-//权限配置
+// 前往权限
 $("#qxpz").live("click", function () {
     window.location = ("/Jurisdiction.html")
 });
