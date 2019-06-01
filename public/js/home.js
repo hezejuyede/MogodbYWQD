@@ -1,4 +1,5 @@
 window.onload = function () {
+    getIpUrl();
     getLeftNav();
     getHome();
     getDivWidth();
@@ -11,6 +12,13 @@ window.onload = function () {
 };
 //全局定义定时器
 var timer;
+
+//根据加载的URL，自动获取IP，来进行IP赋值
+function getIpUrl() {
+    var IP = window.location.host;
+    ip = IP.substring(0, IP.length - 5);
+}
+
 
 //根据浏览器固定宽度设置页面固定大小
 function screenWidth() {userLogin
@@ -82,7 +90,7 @@ function getObjectValue() {
     u = JSON.parse(URL);
     url = encodeURI(u);
     if (url !== null) {
-        $("#iframe").html("<object classid=\"clsid:4F26B906-2854-11D1-9597-00A0C931BFC8\" id=\"Pbd1\" width=\"100%\" height=\"100%\"><param name=\"_cx\" value=\"24262\"><param name=\"_cy\" value=\"16140\"><param name=\"ServerIniURL\" value><param name=\"DisplayURL\" value='http://10.17.90.101/piweb/YWQD/" + url + ".PDI'></object>")
+        $("#iframe").html("<object classid=\"clsid:4F26B906-2854-11D1-9597-00A0C931BFC8\" id=\"Pbd1\" width=\"100%\" height=\"100%\"><param name=\"_cx\" value=\"24262\"><param name=\"_cy\" value=\"16140\"><param name=\"ServerIniURL\" value><param name=\"DisplayURL\" value='http://"+ ip+ "/piweb/YWQD/" + url + ".PDI'></object>")
     }
 
 }
@@ -175,7 +183,7 @@ function getLeftNav() {
                             var url = localStorage.getItem("URL", URL);
                             u = JSON.parse(url);
                             url = encodeURI(u);
-                            $("#iframe").html("<object classid=\"clsid:4F26B906-2854-11D1-9597-00A0C931BFC8\" id=\"Pbd1\" width=\"100%\" height=\"100%\"><param name=\"_cx\" value=\"24262\"><param name=\"_cy\" value=\"16140\"><param name=\"ServerIniURL\" value><param name=\"DisplayURL\" value='http://10.17.90.101/piweb/YWQD/" + url + ".PDI'></object>")
+                            $("#iframe").html("<object classid=\"clsid:4F26B906-2854-11D1-9597-00A0C931BFC8\" id=\"Pbd1\" width=\"100%\" height=\"100%\"><param name=\"_cx\" value=\"24262\"><param name=\"_cy\" value=\"16140\"><param name=\"ServerIniURL\" value><param name=\"DisplayURL\" value='http://"+ ip+ "/piweb/YWQD/" + url + ".PDI'></object>")
                         }
                     });
                 }

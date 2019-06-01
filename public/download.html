@@ -114,6 +114,9 @@
     };
 
     function downloadList() {
+        var IP = window.location.host;
+        ip = IP.substring(0, IP.length - 5);
+
         jQuery.ajax({
             type: 'POST',
             url: 'downloadList',
@@ -154,7 +157,7 @@
                             return filename;
                         }
                         var name = getFilePath(treeNode);
-                        var url = "http://10.17.90.101/piweb/YWQDDownload/" + name + " ";
+                        var url = "http://" + ip + "/piweb/YWQDDownload/" + name + " ";
                         if (!!window.ActiveXObject || "ActiveXObject" in window) {
                             window.open(url, '_blank');
                         }
