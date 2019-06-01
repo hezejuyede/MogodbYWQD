@@ -87,10 +87,10 @@
     <div class="center" id="center">
         <div class="centerTop">
             <div class="centerTopLeft fl">
-                <div class="leftTree" id="leftTree"></div>
+                <ul id="leftTree" class="ztree"></ul>
             </div>
             <div class="centerTopRight fl">
-                <div class="rightTree" id="rightTree"></div>
+                <ul id="rightTree" class="ztree"></ul>
             </div>
         </div>
         <div class="centerBottom">
@@ -110,6 +110,7 @@
 <script>
     window.onload = function () {
         getDivWidth();
+        getRightNav();
         getLeftNav();
     };
 
@@ -121,9 +122,55 @@
 
     }
 
-
-    //向后台动态请求左侧树状导航栏地址
+    //向后台动态请求右侧树状导航栏地址
     function getLeftNav() {
+        jQuery.ajax({
+            type: 'POST',
+            url: 'HomeRightNav',
+            contentType: "application/x-www-form-urlencoded",
+            dataType: 'json',
+            success: function (data) {
+                if(data.state="1"){
+                    var setting = {
+                        check: {
+                            enable: true,
+                            chkStyle: "radio",
+                            radioType: "all"
+                        },
+                        data: {
+                            simpleData: {
+                                enable: true,
+                                idKey: "id",
+                                pIdKey: "pId",
+                                rootPId: ""
+                            }
+                        },
+                        view: {
+                            dblClickExpand: false
+                        },
+                        callback: {
+                            onClick: zTreeOnClick
+                        }
+                    };
+
+                    function zTreeOnClick(event, treeId, treeNode) {
+
+                    }
+
+                    var t = $("#leftTree");
+                    t = $.fn.zTree.init(t, setting, data.data);
+                }
+                else {
+                    alert(data.messages)
+                }
+            }
+        });
+
+    }
+
+
+    //向后台动态请求右侧树状导航栏地址
+    function getRightNav() {
         jQuery.ajax({
             type: 'POST',
             url: 'HomeLeftNav',
@@ -131,6 +178,10 @@
             dataType: 'json',
             success: function (data) {
                 var setting = {
+                    check: {
+                        enable: true,
+                        chkboxType : { "Y" : "ps", "N" : "ps" }
+                    },
                     data: {
                         simpleData: {
                             enable: true,

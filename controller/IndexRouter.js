@@ -413,6 +413,7 @@ exports.admRegister = function (req, res, next) {
 };
 
 
+
 //左侧导航
 exports.YWHomeLeftNav = function (req, res, next) {
 
@@ -427,6 +428,29 @@ exports.YWHomeLeftNav = function (req, res, next) {
 
 
 };
+
+
+//右侧导航
+exports.HomeRightNav = function (req, res, next) {
+    mongodb.find("userInfo", {}, (err, result) => {
+        if (result.length > 0) {
+            var data = [];
+            for (var i = 0; i < result.length; i++) {
+                var json = {
+                    "id": i + 1,
+                    "pId": 0,
+                    "name": result[i].username
+                };
+                data.push(json);
+            }
+            res.json({"state": "1", "data": data, "messages": "没有数据"});
+        }
+        else {
+            res.json({"state": "-1", "data": [], "messages": "没有数据"});
+        }
+    })
+};
+
 
 //下载列表
 exports.downloadList = function (req, res, next) {
