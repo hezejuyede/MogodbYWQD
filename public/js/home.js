@@ -21,13 +21,11 @@ function getIpUrl() {
 
 
 //根据浏览器固定宽度设置页面固定大小
-function screenWidth() {userLogin
+function screenWidth() {
     var W = $(window).width();
     var YWHome = $("#YWHome");
-    var userLogin = $("#userLogin")
     if (W < 1200) {
         YWHome.css("width","1200px");
-
     }
 }
 
