@@ -46,10 +46,12 @@ function getHome() {
     }
     else if (NowUserStates === 1) {
         $("#login").append("<div class=\"userName\" id=\"userName\"><img src='../icon/yh.png' style='height: 20px;margin-right: 10px'></img><span>" + NowUserInfos.username + "</span></div><div class=\"outLogin\"><img src='../icon/tc.png' style='height: 20px;margin-right: 5px'></img><span id=\"outLogin\">退出登录</span></div>");
+
     }
     else if (NowUserStates === 2) {
         $("#login").append("<div class=\"userName\" id=\"userName\"><img src='../icon/yh.png' style='height: 20px;margin-right: 10px'></img><span>" + NowUserInfos.username + "</span></div><div class=\"outLogin\"><img src='../icon/tc.png' style='height: 20px;margin-right: 5px'></img><span id=\"outLogin\">退出登录</span></div>");
         $("#login").prepend("<div class=\"outLogin\"><img src='../icon/Message.png' style='height: 20px;margin-right: 5px'></img><span id=\"Message\">留言反馈</span></div>");
+        $("#login").prepend("<div class=\"outLogin\"><img src='../icon/qxpz.png' style='height: 20px;margin-right: 5px'></img><span id=\"qxpz\">权限配置</span></div>");
     }
 
 }
@@ -645,6 +647,12 @@ $("#outLogin").live("click", function () {
 $("#Message").live("click", function () {
     window.location = ("/MessageBoard.html?" + 1)
 });
+
+//权限配置
+$("#qxpz").live("click", function () {
+    window.location = ("/Jurisdiction.html")
+});
+
 
 
 //左侧消失
