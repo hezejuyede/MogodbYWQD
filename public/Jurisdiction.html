@@ -45,7 +45,7 @@
         }
 
         .centerTopRight{
-            width: 60%;
+            width: 40%;
             height: 100%;
 
         }
@@ -55,6 +55,12 @@
             overflow: auto;
             position: relative;
             padding-top: 50px;
+        }
+        .centerTopRegister{
+            width: 20%;
+            height: 100%;
+            background-color: #c81623;
+
         }
         .centerTopRightDivTitle{
             width: 100%;
@@ -119,7 +125,8 @@
         <div class="centerTop">
             <div class="centerTopLeft fl">
                 <div class="centerTopLeftTitle">
-                    <span>选择人员</span>
+                    <span style="margin-right:20px">选择人员</span>
+                    <span style="color: #c81623;cursor: pointer" id="goToUserRegister">注册新用户</span>
                 </div>
                 <div class="centerTopLeftTree">
                     <ul id="leftTree" class="ztree"></ul>
@@ -309,9 +316,12 @@
         else {
             alert("请选择名字和加权限")
         }
-    })
+    });
 
-
+    //前往用户注册页面
+    $("#goToUserRegister").click(function () {
+        window.location="/register.html"
+    });
 </script>
 </body>
 </html>
