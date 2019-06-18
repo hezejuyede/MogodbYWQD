@@ -303,15 +303,7 @@
                     success: function (result) {
                         if (result.state === 1) {
                             alert("注册成功");
-                            var userInfo = {
-                                username: result.username
-                            };
-                            var UserState = result.state;
-                            userInfo = JSON.stringify(userInfo);
-                            UserState = JSON.stringify(UserState);
-                            localStorage.setItem("userInfos", userInfo);
-                            localStorage.setItem("UserStates", UserState);
-                            window.location = "/index.html"
+                            window.location = "/Jurisdiction.html"
                         }
                         else if (result === "-1") {
                             alert("该用户已注册")
