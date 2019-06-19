@@ -53,6 +53,6 @@ app.get("/inputData", IndexRouter.inputData);           //动态获取留言详�
 app.post("/setData", IndexRouter.setData);           //动态获取留言详情
 
 
-app.listen(3001);                                               //监听3000端口
+app.listen(3000);                                               //监听3000端口
 
 console.log("SERVER START");                                     //控制台打印服务器成功启动信息
