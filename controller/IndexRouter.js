@@ -97,6 +97,66 @@ exports.userRegister = function (req, res, next) {
 };
 
 
+//管理员密码修改
+exports.updateAmdPsd = function (req, res, next) {
+    var form = new formidable.IncomingForm();
+    form.parse(req, function (err, fields) {
+        var password = fields.password;
+        var Password = md5(md5(password).substr(4, 7) + md5(password));
+        mongodb.find("userInfo", {"username": fields.username}, (err, result) => {
+            if (err) {
+                res.json("-4");
+                return;
+            }
+            if (result.length === 0) {
+                res.json("-1");
+                return;
+            }
+            if (result.length !== 0) {
+                mongodb.updateMany("userInfo", {"username": fields.username},{$set:{"password": Password}},(err,result)=>{
+                    if (err) {
+                        res.json("-3");
+                    }
+                    else {
+                        res.json("1");
+                    }
+                })
+            }
+        })
+    })
+};
+
+
+//用户密码修改
+exports.updateUserPsd = function (req, res, next) {
+    var form = new formidable.IncomingForm();
+    form.parse(req, function (err, fields) {
+        var password = fields.password;
+        var Password = md5(md5(password).substr(4, 7) + md5(password));
+        mongodb.find("admInfo", {"username": fields.username}, (err, result) => {
+            if (err) {
+                res.json("-4");
+                return;
+            }
+            if (result.length === 0) {
+                res.json("-1");
+                return;
+            }
+            if (result.length !== 0) {
+                mongodb.updateMany("admInfo", {"username": fields.username},{$set:{"password": Password}},(err,result)=>{
+                    if (err) {
+                        res.json("-3");
+                    }
+                    else {
+                        res.json("1");
+                    }
+                })
+            }
+        })
+    })
+};
+
+
 //管理员注册
 exports.admRegister = function (req, res, next) {
     var form = new formidable.IncomingForm();

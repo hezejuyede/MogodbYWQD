@@ -22,6 +22,16 @@ app.post("/userLogin", IndexRouter.userLogin);                    //用户登录
 
 app.post("/admUserLogin", IndexRouter.admUserLogin);             //管理员用户登录
 
+app.post("/userRegister", IndexRouter.userRegister);             //用户注册
+
+app.post("/admRegister", IndexRouter.admRegister);               //管理员用户注册
+
+app.post("/updateAmdPsd", IndexRouter.updateAmdPsd);               //管理员密码修改
+
+app.post("/updateUserPsd", IndexRouter.updateUserPsd);             //用户密码修改
+
+
+
 app.post("/HomeLeftNav", IndexRouter.YWHomeLeftNav);            //请求左侧导航
 
 app.post("/HomeRightNav", IndexRouter.HomeRightNav);            //请求右侧侧导航
@@ -36,9 +46,7 @@ app.post("/UserSay", IndexRouter.UserSay);                      //客户发送�
 
 app.post("/savePdi", IndexRouter.savePdi);                      //客户发送的信息
 
-app.post("/userRegister", IndexRouter.userRegister);             //用户注册
 
-app.post("/admRegister", IndexRouter.admRegister);               //管理员用户注册
 
 app.post("/getMessageList", IndexRouter.getMessageList);         //动态获取留言详情
 
