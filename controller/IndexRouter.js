@@ -103,7 +103,7 @@ exports.updateAmdPsd = function (req, res, next) {
     form.parse(req, function (err, fields) {
         var password = fields.password;
         var Password = md5(md5(password).substr(4, 7) + md5(password));
-        mongodb.find("userInfo", {"username": fields.username}, (err, result) => {
+        mongodb.find("admInfo", {"admName": fields.username}, (err, result) => {
             if (err) {
                 res.json("-4");
                 return;
@@ -113,7 +113,7 @@ exports.updateAmdPsd = function (req, res, next) {
                 return;
             }
             if (result.length !== 0) {
-                mongodb.updateMany("userInfo", {"username": fields.username},{$set:{"password": Password}},(err,result)=>{
+                mongodb.updateMany("admInfo", {"admName": fields.username},{$set:{"admPassword": Password}},(err,result)=>{
                     if (err) {
                         res.json("-3");
                     }
@@ -133,7 +133,7 @@ exports.updateUserPsd = function (req, res, next) {
     form.parse(req, function (err, fields) {
         var password = fields.password;
         var Password = md5(md5(password).substr(4, 7) + md5(password));
-        mongodb.find("admInfo", {"username": fields.username}, (err, result) => {
+        mongodb.find("userInfo", {"username": fields.username}, (err, result) => {
             if (err) {
                 res.json("-4");
                 return;
@@ -143,7 +143,7 @@ exports.updateUserPsd = function (req, res, next) {
                 return;
             }
             if (result.length !== 0) {
-                mongodb.updateMany("admInfo", {"username": fields.username},{$set:{"password": Password}},(err,result)=>{
+                mongodb.updateMany("userInfo", {"username": fields.username},{$set:{"password": Password}},(err,result)=>{
                     if (err) {
                         res.json("-3");
                     }
