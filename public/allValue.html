@@ -133,7 +133,7 @@
             var valueList = jsonstrs.valueList;
             var valueStr = JSON.stringify(valueList);
             jQuery.ajax({
-                url: "http://" + ip + ":8083/allValue.ashx",
+                url: "http://" + ip + ":8089/allValue.ashx",
                 type: 'get',
                 data: {"valueList": valueStr},
                 dataType: "jsonp",

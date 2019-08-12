@@ -201,7 +201,7 @@
         $(valueList).each(function (i, e) {
             if (e.Tag === value) {
                 jQuery.ajax({
-                    url: "http://" + ip + ":8083/ValueInfo.ashx",
+                    url: "http://" + ip + ":8089/ValueInfo.ashx",
                     type: 'GET',
                     data: {"Tag": value},
                     dataType: "jsonp",

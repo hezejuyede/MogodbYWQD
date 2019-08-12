@@ -81,10 +81,6 @@ function screenInfo() {
         R.style.display = "none";
         center.css("width", "100%");
     }
-    else {
-        R.style.display = "none";
-        center.css("width", "85%");
-    }
 }
 
 
@@ -230,7 +226,7 @@ function getMaxMin() {
             timer = setInterval(function setMaxMinValue() {
                 jQuery.ajax({
                     type: 'GET',
-                    url: 'http://10.176.124.10:8099/GetTagAlarm.ashx',
+                    url: "http://"+ ip+ ":8089/GetTagAlarm.ashx",
                     data: {"DATA": JSON.stringify(valueList)},
                     dataType: "jsonp",
                     jsonp: "callback",
@@ -317,7 +313,7 @@ function getMaxMin() {
             timer = setInterval(function setMaxMinValue() {
                 jQuery.ajax({
                     type: 'GET',
-                    url: 'http://10.176.124.10:8099/GetTagAlarm.ashx',
+                    url: "http://"+ ip+ ":8089/GetTagAlarm.ashx",
                     data: {"DATA": JSON.stringify(valueList)},
                     dataType: "jsonp",
                     jsonp: "callback",
