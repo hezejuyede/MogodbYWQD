@@ -81,6 +81,10 @@ function screenInfo() {
         R.style.display = "none";
         center.css("width", "100%");
     }
+    else {
+        R.style.display = "none";
+        center.css("width", "85%");
+    }
 }
 
 
